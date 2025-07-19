@@ -2,6 +2,7 @@ import supabase from '../utils/supabase';
 import {Response, Request, NextFunction} from 'express';
 import { Express } from '../types/express';
 
+//middleware to check if user is authenticated
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     //get token from headers
     const token = (req.headers as Express.AuthenticatedRequest['headers']).Authorization.split(' ')[1];

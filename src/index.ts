@@ -1,6 +1,7 @@
-import express, {Request, Response, RequestHandler} from "express";
+import express, {Request, Response} from "express";
 import dotenv from 'dotenv';
 import { requireAuth } from "./middleware/auth";
+import usersRouter from "./routes/users";
 
 dotenv.config();
 
@@ -8,10 +9,6 @@ const app = express();
 
 app.use(express.json());
 const port = 3000;
-
-app.get("/ping", (_req, res) => {
-  res.send("pong");
-});
 
 app.get('/api/positions', requireAuth, async (req: Request, res: Response) => {
   try {
@@ -30,6 +27,8 @@ app.get('/api/positions', requireAuth, async (req: Request, res: Response) => {
 
   return;
 });
+
+app.use("/user", usersRouter);
 
 app.listen(port, () => {
   console.log("Server running on port", port);
