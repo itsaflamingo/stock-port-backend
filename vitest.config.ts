@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    globals: true,
+    include: ['vitest/**/*.test.ts'], // or just ['vitest/**']    globals: true,
     environment: 'node',
   },
 });
