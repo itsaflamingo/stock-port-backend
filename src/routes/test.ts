@@ -10,9 +10,6 @@ router.get('/test', async (req: Request, res: Response): Promise<void> => {
       .select('*')
       .limit(1);
 
-    console.log('🧪 Supabase object:', supabase);
-
-
     if (error) {
       console.error('Supabase error:', error.message);
       res.status(500).json({ error: error.message });
@@ -25,5 +22,26 @@ router.get('/test', async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+router.post('/test', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { name } = req.body;
+    const { data, error } = await supabase
+      .from('positions')
+      .insert({name})
+      .select();
+
+    if(error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    
+    res.status(201).json({ success: true, data });
+  }
+  catch (err) {
+    console.error('Unexpected error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
 
 export default router;
