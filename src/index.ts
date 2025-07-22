@@ -1,9 +1,10 @@
-import express, {Request, Response} from "express";
+import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
 import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
 import signUp from "./routes/sign-up";
-import pool from "../src/db/pool";
+import pool from "./db/pool";
+import index from "./routes/index";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.get('/api/positions', requireAuth, async (req: Request, res: Response) => {
   return;
 });
 
+app.use("/", index);
 app.use("/user", usersRouter);
 app.use("/signup", signUp);
 
