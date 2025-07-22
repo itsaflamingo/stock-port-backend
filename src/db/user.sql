@@ -1,6 +1,6 @@
 CREATE TYPE user_role AS ENUM ('user', 'admin');
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
@@ -8,3 +8,4 @@ CREATE TABLE users (
     role user_role DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

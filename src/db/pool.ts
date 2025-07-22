@@ -1,12 +1,11 @@
-const { Pool } = require("pg");
-
+import { Pool } from "pg";
 // All of the following properties should be read from environment variables
 // We're hardcoding them here for simplicity
-module.exports = new Pool({
+export default new Pool({
   host: "localhost", // or wherever the db is hosted
-  user: "<username>",
+  user: process.env.PSQL_USER,
+  // password: process.env.PSQL_PASSWORD,
   database: "stock_port",
-  role: "<role>",
-  password: "<role_password>",
   port: 5432, // The default port
 });
+

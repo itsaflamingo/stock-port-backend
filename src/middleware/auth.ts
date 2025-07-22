@@ -1,24 +1,16 @@
-import supabase from '../utils/supabase';
+import jwt from 'jsonwebtoken';
+import pool from '../db/pool';
 import {Response, Request, NextFunction} from 'express';
 import { Express } from '../types/express';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 //middleware to check if user is authenticated
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     //get token from headers
-    const token = (req.headers as Express.AuthenticatedRequest['headers']).Authorization.split(' ')[1];
-    //return error if no token
-    if (!token) {
-        res.status(401).json({ error: 'No token provided' });
-        return;
-    }
-    //get user from token
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-    //return error if no user
-    if (error || !user) {
-        res.status(401).json({ error: 'Invalid token' });
-        return;
-    }
-    //attach user to request
-    req.user = user; 
-    next();
+    const secret = JWT_SECRET;
+    
+    //get header from req
+    //extract token from header 
+    //sign token
 }
