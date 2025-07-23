@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
-import { requireAuth } from "./middleware/auth";
+// import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
 import signUp from "./routes/sign-up";
 import pool from "./db/pool";
@@ -21,7 +21,7 @@ pool.query('SELECT NOW()')
   });
 
 
-app.get('/api/positions', requireAuth, async (req: Request, res: Response) => {
+app.get('/api/positions', async (req: Request, res: Response) => {
   try {
     if (!req.user) {
       res.status(401).json({ error: 'Unauthorized' });

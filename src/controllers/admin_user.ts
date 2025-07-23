@@ -17,6 +17,8 @@ async function setUpUsersTable(): Promise<boolean> {
 
     await pool.query(SQL);
 
+    console.log(SQL);
+
     const status: QueryResult<any> = await pool.query(`
         SELECT EXISTS (
             SELECT 1
@@ -24,6 +26,7 @@ async function setUpUsersTable(): Promise<boolean> {
             WHERE table_name = 'users'
         ) AS table_existence;`)
 
+    console.log(status.rows[0]);
     return status.rows[0];
 }
 
