@@ -1,32 +1,18 @@
 import { QueryResult } from "pg";
 import pool from "./../db/pool";
 import dotenv from "dotenv";
+import create_users, { create_type, select } from "../db/schemas/user_schema";
 
 dotenv.config();
 
+
 async function setUpUsersTable(): Promise<boolean> {
+    await pool.query(create_type);
+    await pool.query(create_users);
 
-    const SQL = `CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        username VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE,
-        password TEXT NOT NULL,
-        role VARCHAR(255) DEFAULT 'user',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )`
+    //Confirm that users table has been created
+    const status: QueryResult<any> = await pool.query(select)
 
-    await pool.query(SQL);
-
-    console.log(SQL);
-
-    const status: QueryResult<any> = await pool.query(`
-        SELECT EXISTS (
-            SELECT 1
-            FROM information_schema.tables
-            WHERE table_name = 'users'
-        ) AS table_existence;`)
-
-    console.log(status.rows[0]);
     return status.rows[0];
 }
 
