@@ -19,6 +19,9 @@ async function setUpUsersTable(): Promise<boolean> {
 
 async function setUpAdmin(): Promise<object[]> {
     const result = await pool.query(insertAdminUser, params);
+    if (result.rows.length === 0) {
+        throw new Error("Admin user already exists");
+    }
     return result.rows[0];
 }
 
