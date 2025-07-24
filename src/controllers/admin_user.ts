@@ -1,7 +1,8 @@
 import { QueryResult } from "pg";
 import pool from "./../db/pool";
 import dotenv from "dotenv";
-import create_users, { create_type, select } from "../db/schemas/user_schema";
+import create_users, { create_type, select } from "../db/schemas/user-schema";
+import { insertAdminUser, params } from "../db/queries/admin-user";
 
 dotenv.config();
 
@@ -17,23 +18,7 @@ async function setUpUsersTable(): Promise<boolean> {
 }
 
 async function setUpAdmin(): Promise<object[]> {
-
-    await pool.query(
-        `DO $$ BEGIN
-            CREATE TYPE user_role AS ENUM ('user', 'admin');
-        EXCEPTION
-            WHEN duplicate_object THEN NULL;
-        END $$;
-    `)
-
-    const username = process.env.ADMIN_USERNAME;
-    const email = process.env.ADMIN_EMAIL;
-    const password = process.env.ADMIN_PASSWORD;
-
-
-    const result = await pool.query(
-        'INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *', [username, email, password, 'admin']
-    )
+    const result = await pool.query(insertAdminUser, params);
     return result.rows[0];
 }
 
