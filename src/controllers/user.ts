@@ -1,7 +1,7 @@
 import { QueryResult } from "pg";
 import pool from "../db/pool";
 import dotenv from "dotenv";
-import createUsersTable, { createType, select, findUser, addUser } from "../db/schemas/user-schema";
+import createUsersTable, { createType, select, findUser, addUser, alterTableUsers } from "../db/schemas/user-schema";
 import { insertAdminUser, params } from "../db/queries/admin-user";
 
 dotenv.config();
@@ -37,6 +37,7 @@ async function getAllUsernames(): Promise<object[]> {
 }
 
 async function addUserIfNotExists(username: string, email: string, password: string): Promise<void> {
+    await pool.query(alterTableUsers)
     const result = await pool.query(addUser, [username.toString(), email.toString(), password.toString()]);
     console.log(result.rows[0]);
     return result.rows[0];

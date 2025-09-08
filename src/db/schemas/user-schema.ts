@@ -5,6 +5,8 @@ EXCEPTION
     WHEN duplicate_object THEN null;
 END $$`;
 
+const alterTableUsers = `ALTER TABLE users ADD CONSTRAINT unique_username_email UNIQUE (username, email);`
+
 const createUsersTable = `
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -13,7 +15,7 @@ const createUsersTable = `
         password TEXT NOT NULL,
         role user_role DEFAULT ' user ',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )`;
+)`;
 
 const select = `
         SELECT EXISTS (
@@ -31,12 +33,10 @@ const findUser = `
 
 const addUser = `
     INSERT INTO users (username, email, password)
-        SELECT $1::VARCHAR, $2::VARCHAR, $3::VARCHAR
-            WHERE NOT EXISTS (
-                SELECT 1 FROM users WHERE username = $1 OR email = $2
-            )
-        RETURNING *;
+    VALUES ($1, $2, $3)
+    ON CONFLICT (username, email) DO NOTHING
+    RETURNING *;
     `
 
 export default createUsersTable
-export { createType, select, findUser, addUser }
+export { createType, select, findUser, addUser, alterTableUsers }
