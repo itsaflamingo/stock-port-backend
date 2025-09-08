@@ -8,10 +8,19 @@ router.get("/", (_req, res) => {
     res.send("sign up");
 })
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const { username, email, password } = req.body;
-    res.send(addUserIfNotExists(username, email, password));
-    console.log("REQ.body", req.body);
+    try {
+        const result = await addUserIfNotExists(username, email, password);
+        console.log(result);
+    }
+    catch (error: any) {
+        if (error.message.includes("unique_username_email")) {
+            res.status(409).send("User already exists");
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    }
 })
 
 export default router;
