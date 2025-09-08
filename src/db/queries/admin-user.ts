@@ -18,6 +18,7 @@ const insertAdminUser = (`
     SELECT username, email, role 
     FROM users WHERE username = $1::text;`
 )
+
 const params = [username, email, password];
 
 export {

@@ -1,15 +1,14 @@
 import { QueryResult } from "pg";
-import pool from "./../db/pool";
+import pool from "../db/pool";
 import dotenv from "dotenv";
-import create_users, { create_type, select } from "../db/schemas/user-schema";
+import createUsersTable, { createType, select, findUser, addUser } from "../db/schemas/user-schema";
 import { insertAdminUser, params } from "../db/queries/admin-user";
 
 dotenv.config();
 
-
 async function setUpUsersTable(): Promise<boolean> {
-    await pool.query(create_type);
-    await pool.query(create_users);
+    await pool.query(createType);
+    await pool.query(createUsersTable);
 
     //Confirm that users table has been created
     const status: QueryResult<any> = await pool.query(select)
@@ -25,18 +24,28 @@ async function setUpAdmin(): Promise<object[]> {
     return result.rows[0];
 }
 
+async function isUserInDb(username: string, email: string): Promise<boolean> {
+    //query database for username
+    const result = await pool.query(findUser, [username, email]);
+    //return bool - true if user exists, false if not
+    return result.rows[0];
+}
+
 async function getAllUsernames(): Promise<object[]> {
     const { rows } = await pool.query("SELECT * from usernames")
     return rows;
 }
 
-async function returnUsername(username: string): Promise<void> {
-    await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
+async function addUserIfNotExists(username: string, email: string, password: string): Promise<void> {
+    const result = await pool.query(addUser, [username.toString(), email.toString(), password.toString()]);
+    console.log(result.rows[0]);
+    return result.rows[0];
 }
 
 export {
     setUpUsersTable,
     setUpAdmin,
     getAllUsernames,
-    returnUsername
+    addUserIfNotExists,
+    isUserInDb
 }
