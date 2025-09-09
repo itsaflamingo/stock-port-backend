@@ -52,11 +52,13 @@ passport.use(
     }
   })
 );
-
+// To make sure user is logged in and stays logged in passport calls function from express-session that uses data to create cookie called connect.sid, stored in browser 
+// serializeUser and deserializeUser are used to make sure that whatever bit of data it’s looking for actually exists in our Database
+// serializeUser takes a callback which contains the information we wish to store in the session data
 passport.serializeUser((user: Express.User, done) => {
   done(null, (user as User).id);
 });
-
+// deserializeUser is called when retrieving a session, where it will extract the data we “serialized” then attach something to the .user property of the request object (req.user) for use in the rest of the request.
 passport.deserializeUser(async (id, done) => {
   try {
     const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
@@ -102,6 +104,16 @@ app.post('/login', (req, res, next) => {
 }, (req, res) => {
   res.status(200).json({ message: 'Login successful', user: req.user });
 });
+
+app.get("/log-out", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.send("logged out");
+  });
+});
+
 
 app.listen(port, () => {
   console.log("Server running on port", port);
