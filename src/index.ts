@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
 // import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
@@ -96,30 +96,12 @@ app.use("/", index);
 app.use("/user", usersRouter);
 app.use("/register", signUp);
 
-app.post('/login', (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('local', (err: any, user: any, info?: { message?: string }) => {
-    if (err) return next(err);
-
-    if (!user) {
-      // auth failed → send own JSON
-      return res.status(401).json({
-        ok: false,
-        message: info?.message ?? 'Invalid username or password',
-      });
-    }
-
-    // establish session
-    req.logIn(user, (loginErr) => {
-      if (loginErr) return next(loginErr);
-      return res.status(200).json({
-        ok: true,
-        message: 'Login successful',
-        user: { id: user.id, username: user.username },
-      });
-    });
-  })(req, res, next);
+// src/index.ts
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local')(req, res, next);
+}, (req, res) => {
+  res.status(200).json({ message: 'Login successful', user: req.user });
 });
-
 
 app.listen(port, () => {
   console.log("Server running on port", port);
