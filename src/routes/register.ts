@@ -1,6 +1,5 @@
 import express from "express";
 import { addUserIfNotExists } from "../controllers/user";
-// import { isUserInDb } from "../controllers/user";
 
 const router = express.Router();
 
@@ -12,7 +11,7 @@ router.post("/", async (req, res) => {
     const { username, email, password } = req.body;
     try {
         const result = await addUserIfNotExists(username, email, password);
-        console.log(result);
+        res.send(result);
     }
     catch (error: any) {
         if (error.message.includes("unique_username_email")) {
