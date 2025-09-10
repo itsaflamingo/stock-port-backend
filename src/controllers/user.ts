@@ -37,8 +37,11 @@ async function getAllUsernames(): Promise<object[]> {
 }
 
 async function addUserIfNotExists(username: string, email: string, password: string): Promise<any> {
-    await pool.query(alterTableUsers)
+    console.log("USERNAME", username, email, password)
+    const query = await pool.query(alterTableUsers)
+    console.log("QUERY", query);
     const result = await pool.query(addUser, [username.toString(), email.toString(), password.toString()]);
+    console.log("RESULT: ", result.rows[0])
     return result.rows[0];
 }
 

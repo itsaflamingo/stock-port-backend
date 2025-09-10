@@ -1,5 +1,6 @@
 import express from "express";
 import { addUserIfNotExists } from "../controllers/user";
+import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
@@ -9,17 +10,9 @@ router.get("/", (_req, res) => {
 
 router.post("/", async (req, res) => {
     const { username, email, password } = req.body;
-    try {
-        const result = await addUserIfNotExists(username, email, password);
-        res.send(result);
-    }
-    catch (error: any) {
-        if (error.message.includes("unique_username_email")) {
-            res.status(409).send("User already exists");
-        } else {
-            res.status(500).send("Internal Server Error");
-        }
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await addUserIfNotExists(username, email, hashedPassword);
+    res.send(result);
 })
 
 export default router;

@@ -5,7 +5,18 @@ EXCEPTION
     WHEN duplicate_object THEN null;
 END $$`;
 
-const alterTableUsers = `ALTER TABLE users ADD CONSTRAINT unique_username_email UNIQUE (username, email);`
+const alterTableUsers = `
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'unique_username_email'
+    ) THEN
+        ALTER TABLE users 
+        ADD CONSTRAINT unique_username_email UNIQUE (username, email);
+    END IF;
+END $$;
+`;
 
 const createUsersTable = `
     CREATE TABLE IF NOT EXISTS users (
