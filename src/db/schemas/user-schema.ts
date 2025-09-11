@@ -48,6 +48,16 @@ const addUser = `
     ON CONFLICT (username, email) DO NOTHING
     RETURNING *;
     `
+const updateUser = `UPDATE users
+SET
+  username = COALESCE($2, username),
+  email = COALESCE($3, email),
+  password = COALESCE($4, password)
+WHERE id = $1
+RETURNING id, username, email;
+`
+
+const deleteUser = `DELETE FROM users WHERE id = $1 RETURNING id;`
 
 export default createUsersTable
-export { createType, select, findUser, addUser, alterTableUsers }
+export { createType, select, findUser, addUser, alterTableUsers, updateUser, deleteUser }
