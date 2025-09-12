@@ -2,9 +2,13 @@ import { QueryResult } from "pg";
 import pool from "../db/pool";
 import dotenv from "dotenv";
 import createUsersTable, { createType, select, findUser, addUser, alterTableUsers, updateUser, deleteUser } from "../db/schemas/user-schema";
+import { User } from "../types/express/user";
 import { insertAdminUser, params } from "../db/queries/admin-user";
 
 dotenv.config();
+
+type UserWithoutPassword = Omit<User, 'password'>;
+
 
 async function setUpUsersTable(): Promise<boolean> {
     await pool.query(createType);
@@ -44,9 +48,38 @@ async function addUserIfNotExists(username: string, email: string, password: str
     return result.rows[0]
 }
 
-async function updateUserFn(id: number, username: string, email: string, password: string) {
-    const result = await pool.query(updateUser, [username, email, password, id])
-    return result.rows[0]
+async function updateUserFn(id: number, updates: {
+    [key: string]: any,
+    username?: string,
+    email?: string,
+    password?: string
+}): Promise<UserWithoutPassword | null> {
+    if (!updates.username && !updates.email && !updates.password) {
+        return null;
+    }
+
+    const updateValues = {
+        username: updates.username || null,
+        email: updates.email || null,
+        password: updates.password || null
+    };
+
+    const result = await pool.query(updateUser, [
+        id,
+        updateValues.username,
+        updateValues.email,
+        updateValues.password
+    ]);
+
+    if (result.rows.length === 0) {
+        return null;
+    } else {
+        return {
+            id: result.rows[0].id,
+            username: result.rows[0].username,
+            email: result.rows[0].email,
+        };
+    }
 }
 
 async function deleteUserFn(id: number) {

@@ -8,7 +8,7 @@ router.get("/", (_req, res) => {
 })
 
 router.patch("/", async (req, res) => {
-    const result = await updateUserFn(req.body.username, req.body.email, req.body.password, req.body.id)
+    const result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: req.body.password, })
 
     res.send(result)
 })

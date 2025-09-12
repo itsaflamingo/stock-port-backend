@@ -9,6 +9,7 @@ import session from "express-session";
 import passport from "passport";
 import bcrypt from "bcryptjs";
 import { Strategy as LocalStrategy } from "passport-local";
+import { User } from "./types/express/user";
 
 dotenv.config();
 
@@ -27,12 +28,6 @@ pool.query('SELECT NOW()')
     console.error('❌ DB connection failed:', err);
     process.exit(1);
   });
-
-interface User extends Express.User {
-  id: number;
-  username: string;
-  password: string;
-}
 
 // Use LocalStratefy to authenticate users
 passport.use(
