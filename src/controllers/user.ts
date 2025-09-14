@@ -54,6 +54,7 @@ async function updateUserFn(id: number, updates: {
     email?: string,
     password?: string
 }): Promise<UserWithoutPassword | null> {
+    console.log("UPDATES: ", updates)
     if (!updates.username && !updates.email && !updates.password) {
         return null;
     }
@@ -71,15 +72,8 @@ async function updateUserFn(id: number, updates: {
         updateValues.password
     ]);
 
-    if (result.rows.length === 0) {
-        return null;
-    } else {
-        return {
-            id: result.rows[0].id,
-            username: result.rows[0].username,
-            email: result.rows[0].email,
-        };
-    }
+    console.log("RESULT: ", await result)
+    return result.rows[0];
 }
 
 async function deleteUserFn(id: number) {
