@@ -1,5 +1,6 @@
 import express from "express";
 import { updateUserFn, deleteUserFn } from "../controllers/user";
+import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
@@ -8,7 +9,8 @@ router.get("/", (_req, res) => {
 })
 
 router.patch("/", async (req, res) => {
-    const result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: req.body.password, })
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: hashedPassword, })
 
     res.send(result)
 })

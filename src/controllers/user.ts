@@ -72,7 +72,6 @@ async function updateUserFn(id: number, updates: {
         updateValues.password
     ]);
 
-    console.log("RESULT: ", await result)
     return result.rows[0];
 }
 
