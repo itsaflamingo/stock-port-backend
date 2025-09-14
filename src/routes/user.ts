@@ -9,7 +9,10 @@ router.get("/", (_req, res) => {
 })
 
 router.patch("/", async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    let hashedPassword = "";
+    if (req.body.password) {
+        hashedPassword = await bcrypt.hash(req.body.password, 10)
+    }
     const result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: hashedPassword, })
 
     res.send(result)
