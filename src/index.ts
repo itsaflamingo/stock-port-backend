@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 // import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
 import signUp from "./routes/register";
+import search from "./routes/search"
 import pool from "./db/pool";
 import index from "./routes/index";
 import session from "express-session";
@@ -96,6 +97,7 @@ app.get('/api/positions', async (req: Request, res: Response) => {
 app.use("/", index);
 app.use("/user", usersRouter);
 app.use("/register", signUp);
+app.use("/search", search);
 
 // src/index.ts
 app.post('/login', (req, res, next) => {
