@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 // import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
 import signUp from "./routes/register";
-import search from "./routes/search"
+import search from "./routes/search";
+import candles from "./routes/candles";
 import pool from "./db/pool";
 import index from "./routes/index";
 import session from "express-session";
@@ -98,6 +99,7 @@ app.use("/", index);
 app.use("/user", usersRouter);
 app.use("/register", signUp);
 app.use("/search", search);
+app.use("/candles", candles)
 
 // src/index.ts
 app.post('/login', (req, res, next) => {
