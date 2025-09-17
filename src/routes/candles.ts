@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
     } catch (error: any) {
         console.error(error);
         // Inspect error and decide what to do; often, you may want to just abort:
-        console.warn(
+        res.status(500).send(
             `Skipping yf.quote("${req.body.symbol}"): [${error.name}] ${error.message}`,
         );
         return;
