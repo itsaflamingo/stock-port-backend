@@ -29,7 +29,6 @@ router.get("/", async (req, res) => {
         );
         return;
     }
-
     // send candles
     res.send(candles)
 })

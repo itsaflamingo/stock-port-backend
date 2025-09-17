@@ -1,17 +1,19 @@
 import express from "express";
-import finnhubClient from "../api/finnhub";
+import yahooFinance from "yahoo-finance2";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+    let result;
+
     try {
-        finnhubClient.companyBasicFinancials(req.body.symbol, "all").then((response) => {
-            res.send(response.data)
-        })
+        result = await yahooFinance.search(req.body.symbol);
     } catch (err) {
         console.error(err);
         res.status(500).send("API error");
     }
+
+    res.send(result);
 })
 
 export default router;
