@@ -17,4 +17,9 @@ const addToWatchlist = `
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *;`
 
-export { createWatchlistTable, addToWatchlist }
+const deleteFromWatchlist = `
+    DELETE FROM watchlist
+    WHERE user_id = $1 AND symbol = $2
+    RETURNING *;`
+
+export { createWatchlistTable, addToWatchlist, deleteFromWatchlist }

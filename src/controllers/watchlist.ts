@@ -1,5 +1,5 @@
 import pool from "../db/pool";
-import { addToWatchlist, createWatchlistTable } from "../db/schemas/watchlist_schema";
+import { addToWatchlist, createWatchlistTable, deleteFromWatchlist } from "../db/schemas/watchlist_schema";
 import { Sparkline } from "../types/express/sparkline";
 
 /**
@@ -20,8 +20,19 @@ async function createWatchlistTableFn() {
  * @returns {Promise<object[]>} The result of the query.
  */
 async function addToWatchlistFn(user_id: string, symbol: string, name: string, current_price: string, sparkline: Sparkline) {
-    const result = await pool.query(addToWatchlist, [user_id, symbol, name, current_price, JSON.stringify(sparkline)])
+    let result
+    try {
+        result = await pool.query(addToWatchlist, [user_id, symbol, name, current_price, JSON.stringify(sparkline)])
+    } catch (err) {
+        console.error(err);
+        throw new Error("API error");
+    }
     return result.rows
 }
 
-export { createWatchlistTableFn, addToWatchlistFn }
+async function deleteFromWatchlistFn(user_id: string, symbol: string) {
+
+    const result = await pool.query(deleteFromWatchlist, [user_id, symbol])
+    return result.rows
+}
+export { createWatchlistTableFn, addToWatchlistFn, deleteFromWatchlistFn }

@@ -9,7 +9,6 @@ dotenv.config();
 
 type UserWithoutPassword = Omit<User, 'password'>;
 
-
 async function setUpUsersTable(): Promise<boolean> {
     await pool.query(createType);
     await pool.query(createUsersTable);
