@@ -11,7 +11,7 @@ async function createWatchlistTableFn() {
     return result;
 }
 async function addToWatchlistFn(user_id: string, symbol: string, name: string, current_price: string, sparkline: Sparkline) {
-    const result = await pool.query(addToWatchlist, [user_id, symbol, name, current_price, sparkline])
+    const result = await pool.query(addToWatchlist, [user_id, symbol, name, current_price, JSON.stringify(sparkline)])
     return result.rows
 }
 
