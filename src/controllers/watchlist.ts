@@ -29,9 +29,8 @@ async function addToWatchlistFn(user_id: string, symbol: string, name: string, c
     }
     return result.rows
 }
-
+//Delete from watchlist. Error handling will take place in the router, controller will throw error via pool.query
 async function deleteFromWatchlistFn(user_id: string, symbol: string) {
-
     const result = await pool.query(deleteFromWatchlist, [user_id, symbol])
     return result.rows
 }

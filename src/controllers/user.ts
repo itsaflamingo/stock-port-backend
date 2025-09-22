@@ -9,6 +9,7 @@ dotenv.config();
 
 type UserWithoutPassword = Omit<User, 'password'>;
 
+//create users table if it does not exist
 async function setUpUsersTable(): Promise<boolean> {
     await pool.query(createType);
     await pool.query(createUsersTable);
@@ -18,12 +19,9 @@ async function setUpUsersTable(): Promise<boolean> {
 
     return status.rows[0]
 }
-
+//Call when setting up admin user. 
 async function setUpAdmin(): Promise<object[]> {
     const result = await pool.query(insertAdminUser, params);
-    if (result.rows.length === 0) {
-        throw new Error("Admin user already exists")
-    }
     return result.rows[0]
 }
 

@@ -10,10 +10,19 @@ router.get("/", (_req, res) => {
 
 router.patch("/", async (req, res) => {
     let hashedPassword = "";
+    let result;
+
     if (req.body.password) {
         hashedPassword = await bcrypt.hash(req.body.password, 10)
     }
-    const result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: hashedPassword, })
+    else {
+        res.send("Please enter a password");
+    }
+    try {
+        result = await updateUserFn(req.body.id, { username: req.body.username, email: req.body.email, password: hashedPassword, })
+    } catch (err) {
+        res.send(err);
+    }
 
     res.send(result)
 })
