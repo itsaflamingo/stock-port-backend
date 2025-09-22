@@ -1,4 +1,5 @@
-CREATE TABLE positions (
+const createPositionsTable = `
+CREATE TABLE IF NOT EXISTS positions (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   ticker VARCHAR(10) NOT NULL,
@@ -13,5 +14,11 @@ CREATE TABLE positions (
   exchange VARCHAR(10),
   sector VARCHAR(50),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP );`
+
+const getPositionsQuery = `
+SELECT *
+FROM positions
+WHERE user_id = $1;`
+
+export { createPositionsTable, getPositionsQuery }

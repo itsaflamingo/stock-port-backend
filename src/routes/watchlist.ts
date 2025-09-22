@@ -3,7 +3,7 @@ import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn } from 
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
+router.get("/create-table", (_req, res) => {
     const result = createWatchlistTableFn();
     res.send(result);
 })

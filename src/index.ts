@@ -1,11 +1,12 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import dotenv from 'dotenv';
 // import { requireAuth } from "./middleware/auth";
 import usersRouter from "./routes/user";
 import signUp from "./routes/register";
-import search from "./routes/search";
-import candles from "./routes/candles";
-import watchlist from "./routes/watchlist";
+import searchRouter from "./routes/search";
+import candlesRouter from "./routes/candles";
+import watchlistRouter from "./routes/watchlist";
+import positionsRouter from "./routes/positions"
 import pool from "./db/pool";
 import index from "./routes/index";
 import session from "express-session";
@@ -72,36 +73,13 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-app.get('/api/positions', async (req: Request, res: Response) => {
-
-  interface User {
-    id: number;
-    username: string;
-    password: string;
-  }
-  try {
-    if (!req.user) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
-    }
-    const userId = (req.user as User).id;
-
-    // Query DB, return data
-    res.json({ positions: [], userId });
-  } catch (err) {
-    console.error('Error in /positions:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-
-  return;
-});
-
 app.use("/", index);
 app.use("/user", usersRouter);
 app.use("/register", signUp);
-app.use("/search", search);
-app.use("/candles", candles);
-app.use("/watchlist", watchlist);
+app.use("/search", searchRouter);
+app.use("/candles", candlesRouter);
+app.use("/watchlist", watchlistRouter);
+app.use("/positions", positionsRouter);
 
 // src/index.ts
 app.post('/login', (req, res, next) => {
