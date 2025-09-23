@@ -1,5 +1,5 @@
 import express from "express"
-import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn } from "../controllers/watchlist";
+import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn, getWatchlist } from "../controllers/watchlist";
 
 const router = express.Router();
 
@@ -7,11 +7,22 @@ router.get("/create-table", (_req, res) => {
     const result = createWatchlistTableFn();
     res.send(result);
 })
+router.get("/", async (req, res) => {
+    let result;
+
+    try {
+        result = await getWatchlist(req.body.user_id);
+    } catch (err) {
+        res.send(err);
+    }
+    res.send(result);
+})
 // Make post request to add to watchlist
 router.post("/", async (req, res) => {
     let result;
+
     try {
-        result = await addToWatchlistFn(req.body.user_id, req.body.symbol, req.body.name, req.body.current_price, req.body.sparkline)
+        result = await addToWatchlistFn(req.body.user_id, req.body.symbol)
     }
     catch (err) {
         console.error(err);

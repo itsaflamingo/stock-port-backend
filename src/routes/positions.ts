@@ -31,11 +31,11 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     let result;
-    console.log(req.body.position)
+
     try {
         result = await addPosition(req.body.position);
     } catch (err) {
-        res.send(err)
+        res.send(err);
     }
     res.send(result);
 })

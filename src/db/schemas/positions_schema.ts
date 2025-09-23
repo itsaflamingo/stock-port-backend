@@ -10,9 +10,6 @@ CREATE TABLE IF NOT EXISTS positions (
   buy_date DATE,
   status VARCHAR(10) DEFAULT 'open',
   notes TEXT,
-  currency VARCHAR(3) DEFAULT 'USD',
-  exchange VARCHAR(10),
-  sector VARCHAR(50),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP );`
 
@@ -32,12 +29,20 @@ INSERT INTO positions (
   buy_date,
   status,
   notes,
-  currency,
-  exchange,
-  sector
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+  $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
 RETURNING *;`
 
-export { createPositionsTable, getPositionsQuery, addPositionQuery }
+const editPositionQuery = `
+UPDATE positions
+SET 
+  quantity = COALESCE($1, quantity),
+  notes = COALESCE($2, notes),
+  last_updated = CURRENT_TIMESTAMP
+WHERE id = $3
+  AND user_id = $4
+RETURNING *;
+`
+
+export { createPositionsTable, getPositionsQuery, addPositionQuery, editPositionQuery }

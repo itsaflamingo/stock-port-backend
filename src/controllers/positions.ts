@@ -27,9 +27,6 @@ const addPosition = async (position: Position) => {
         buy_date,
         status,
         notes,
-        currency,
-        exchange,
-        sector,
     } = position;
 
     const result = await pool.query(addPositionQuery, [
@@ -42,11 +39,8 @@ const addPosition = async (position: Position) => {
         buy_date,
         status,
         notes,
-        currency,
-        exchange,
-        sector,
     ]);
-    console.log(result.rows)
+
     return result.rows[0];
 }
 export { createPositionsTableFn, getPositions, addPosition }
