@@ -1,5 +1,5 @@
 import express from "express";
-import { createPositionsTableFn, getPositions } from "../controllers/positions";
+import { addPosition, createPositionsTableFn, getPositions } from "../controllers/positions";
 
 const router = express.Router();
 
@@ -10,10 +10,10 @@ router.get("/create-table", async (_req, res) => {
         result = await createPositionsTableFn();
 
         if (result === undefined) {
-            res.send("Table already exists")
+            res.send("Table already exists");
         }
     } catch (err) {
-        res.send(err)
+        res.send(err);
     }
     res.send(result);
 })
@@ -23,6 +23,17 @@ router.get("/", async (req, res) => {
 
     try {
         result = await getPositions(req.body.id);
+    } catch (err) {
+        res.send(err);
+    }
+    res.send(result);
+})
+
+router.post("/", async (req, res) => {
+    let result;
+    console.log(req.body.position)
+    try {
+        result = await addPosition(req.body.position);
     } catch (err) {
         res.send(err)
     }

@@ -33,6 +33,7 @@
     "@types/supertest": "^6.0.3",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-format-sql": "^1.1.1",
     "eslint-plugin-prettier": "^5.5.3",
     "prettier": "^3.6.2",
     "prettier-plugin-sql": "^0.19.2",

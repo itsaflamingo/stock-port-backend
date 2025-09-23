@@ -1,5 +1,6 @@
-import { createPositionsTable, getPositionsQuery } from "../db/schemas/positions_schema";
+import { addPositionQuery, createPositionsTable, getPositionsQuery } from "../db/schemas/positions_schema";
 import pool from "../db/pool";
+import Position from "../types/express/positions";
 
 const createPositionsTableFn = async () => {
     const result = await pool.query(createPositionsTable);
@@ -15,4 +16,37 @@ const getPositions = async (userId: number) => {
     return result.rows[0];
 }
 
-export { createPositionsTableFn, getPositions }
+const addPosition = async (position: Position) => {
+    const {
+        user_id,
+        ticker,
+        quantity,
+        avg_buy_price,
+        total_return,
+        percent_of_account,
+        buy_date,
+        status,
+        notes,
+        currency,
+        exchange,
+        sector,
+    } = position;
+
+    const result = await pool.query(addPositionQuery, [
+        user_id,
+        ticker,
+        quantity,
+        avg_buy_price,
+        total_return,
+        percent_of_account,
+        buy_date,
+        status,
+        notes,
+        currency,
+        exchange,
+        sector,
+    ]);
+    console.log(result.rows)
+    return result.rows[0];
+}
+export { createPositionsTableFn, getPositions, addPosition }

@@ -21,4 +21,23 @@ SELECT *
 FROM positions
 WHERE user_id = $1;`
 
-export { createPositionsTable, getPositionsQuery }
+const addPositionQuery = `
+INSERT INTO positions (
+  user_id,
+  ticker,
+  quantity,
+  avg_buy_price,
+  total_return,
+  percent_of_account,
+  buy_date,
+  status,
+  notes,
+  currency,
+  exchange,
+  sector
+) VALUES (
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+)
+RETURNING *;`
+
+export { createPositionsTable, getPositionsQuery, addPositionQuery }
