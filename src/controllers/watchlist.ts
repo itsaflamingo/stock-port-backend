@@ -6,13 +6,16 @@ import yahooFinance from "yahoo-finance2";
  * @returns {Promise<void>} The result of the query.
  */
 async function createWatchlistTableFn() {
-    const result = pool.query(createWatchlistTable)
-    return result;
+    return pool.query(createWatchlistTable);
 }
+/**
+ * Takes symbol(s) from req.body and sends API request per symbol to yahoo finance, which returns array of objects with more info for each symbol 
+ * @param user_id 
+ */
 async function getWatchlist(user_id: string) {
     const symbols = await pool.query(getWatchlistQuery, [user_id]);
 
-    const watchlist = await Promise.all(
+    const watchlist = await Promise.allSettled(
         symbols.rows.map(async (row) => {
             const res = await yahooFinance.search(row.symbol);
             return res.quotes.find((q: any) => q.symbol === row.symbol);
@@ -28,7 +31,6 @@ async function getWatchlist(user_id: string) {
  */
 async function addToWatchlistFn(user_id: string, symbol: string) {
     const result = await pool.query(addToWatchlist, [user_id, symbol])
-
     return result.rows;
 }
 //Delete from watchlist. Error handling will take place in the router, controller will throw error via pool.query

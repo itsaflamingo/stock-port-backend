@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     }
     res.send(result);
 })
-// Make post request to add to watchlist
+// Sends user_id and symbol to addToWatchlistFn, if successful returns array containing object with stock info, otherwise sends status 500 with error 
 router.post("/", async (req, res) => {
     let result;
 
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
     }
     res.send(result);
 })
-// Make delete request to remove from watchlist
+// Sends user id and symbol to db, where stock matching symbol is deleted if success, otherwise sends status 500 with error 
 router.delete("/", async (req, res) => {
     let result;
     try {
