@@ -1,5 +1,5 @@
 import express from "express";
-import { addPosition, createPositionsTableFn, getPositions } from "../controllers/positions";
+import { calculateDynamicValues, addPosition, createPositionsTableFn, getPositions } from "../controllers/positions";
 
 const router = express.Router();
 
@@ -23,6 +23,14 @@ router.get("/", async (req, res) => {
 
     try {
         result = await getPositions(req.body.id);
+
+        if (result === undefined) {
+            res.send("User positions has returned undefined");
+        }
+
+        const portfolioPercent = (calculateDynamicValues().getTotal(result));
+
+        res.send(portfolioPercent)
     } catch (err) {
         res.send(err);
     }
