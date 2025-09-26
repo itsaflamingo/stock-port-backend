@@ -23,12 +23,11 @@ INSERT INTO positions (
   ticker,
   quantity,
   avg_buy_price,
-  percent_of_account,
   buy_date,
   status,
-  notes,
+  notes
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9
+  $1, $2, $3, $4, $5, $6, $7
 )
 RETURNING *;`
 

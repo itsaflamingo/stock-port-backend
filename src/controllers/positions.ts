@@ -29,29 +29,42 @@ function calculateDynamicValues() {
 
 }
 
-const getPositions = async (userId: number) => {
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Retrieves an array of Position objects for a given user id.
+ * The objects contain the ticker symbol, quantity, average buy price, and total return.
+ * @param {number} userId - The id of the user.
+ * @returns {Promise<Position[]>} A promise that resolves with an array of Position objects.
+ */
+/*******  dec6f99a-34ca-47d6-be2e-8bba075f7884  *******/
+const getPositions = async (userId: number): Promise<Position[]> => {
     const symbols = await pool.query(getPositionsQuery, [userId]);
 
-    if (symbols.rows.length === 0) {
-        return "User has no positions";
-    }
-
-    const positions = await Promise.allSettled(
+    const positions = await Promise.all(
         symbols.rows.map(async (row) => {
             const res = await yahooFinance.search(row.ticker);
-            return res.quotes.find((q: any) => q.symbol === row.ticker);
+            const quote = res.quotes.find(
+                (q): any =>
+                    "symbol" in q && q.symbol === row.ticker
+            );
+            return {
+                ...row,
+                name: (quote as any).shortname,
+                current_price: (quote as any).regularMarketPrice ?? null
+            } as Position;
         })
     )
+    console.log(positions)
     return positions;
 }
 
 const addPosition = async (position: Position) => {
+
     const {
         user_id,
         ticker,
         quantity,
         avg_buy_price,
-        percent_of_account,
         buy_date,
         status,
         notes,
@@ -62,12 +75,14 @@ const addPosition = async (position: Position) => {
         ticker,
         quantity,
         avg_buy_price,
-        percent_of_account,
         buy_date,
         status,
         notes,
     ]);
 
+    console.log(result.rows[0])
+
     return result.rows[0];
 }
+
 export { calculateDynamicValues, createPositionsTableFn, getPositions, addPosition }
