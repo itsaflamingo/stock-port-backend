@@ -2,8 +2,7 @@ import { addPositionQuery, createPositionsTable, getPositionsQuery } from "../db
 import pool from "../db/pool";
 import Position from "../types/express/positions";
 import yahooFinance from "yahoo-finance2";
-import { QuoteResponseObject, QuoteResponseArray } from "yahoo-finance2/dist/esm/src/modules/quote";
-import { Q } from "vitest/dist/chunks/reporters.d.BFLkQcL6";
+import { QuoteResponseObject } from "yahoo-finance2/dist/esm/src/modules/quote";
 
 const createPositionsTableFn = async () => {
     const result = await pool.query(createPositionsTable);
@@ -11,6 +10,11 @@ const createPositionsTableFn = async () => {
 }
 
 function calculateDynamicValues() {
+
+    const getRealTimePrice = async (ticker: string) => {
+        const quote = await yahooFinance.quote(ticker) as unknown as QuoteResponseObject;
+        return quote.regularMarketPrice ?? quote.postMarketPrice ?? null
+    }
 
     const getTotal = (positions: Array<{ quantity: number, avg_buy_price: number }>) => {
         return positions.reduce((accumulator, position) => {
@@ -25,20 +29,19 @@ function calculateDynamicValues() {
     }
 
     return {
+        getRealTimePrice,
         getTotal,
         getPercentOfAccount
     }
 
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
 /**
  * Retrieves an array of Position objects for a given user id.
  * The objects contain the ticker symbol, quantity, average buy price, and total return.
  * @param {number} userId - The id of the user.
  * @returns {Promise<Position[]>} A promise that resolves with an array of Position objects.
  */
-/*******  dec6f99a-34ca-47d6-be2e-8bba075f7884  *******/
 const getPositions = async (userId: number): Promise<Position[]> => {
     const symbols = await pool.query(getPositionsQuery, [userId]);
 
@@ -50,12 +53,12 @@ const getPositions = async (userId: number): Promise<Position[]> => {
                 (q): any =>
                     "symbol" in q && q.symbol === row.ticker
             );
-            const quote = await yahooFinance.quote(row.ticker) as unknown as QuoteResponseObject;
+            const quote = calculateDynamicValues().getRealTimePrice(row.ticker);
 
             return {
                 ...row,
                 name: (stockInfo as any).shortname,
-                current_price: quote.regularMarketPrice ?? quote.postMarketPrice ?? null
+                current_price: quote
             } as Position;
         })
     )
