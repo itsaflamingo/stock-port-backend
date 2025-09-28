@@ -2,6 +2,8 @@ import { addPositionQuery, createPositionsTable, getPositionsQuery } from "../db
 import pool from "../db/pool";
 import Position from "../types/express/positions";
 import yahooFinance from "yahoo-finance2";
+import { QuoteResponseObject, QuoteResponseArray } from "yahoo-finance2/dist/esm/src/modules/quote";
+import { Q } from "vitest/dist/chunks/reporters.d.BFLkQcL6";
 
 const createPositionsTableFn = async () => {
     const result = await pool.query(createPositionsTable);
@@ -18,7 +20,7 @@ function calculateDynamicValues() {
 
     const getPercentOfAccount = (position: { quantity: number, avg_buy_price: number }, total: number) => {
         const percentOfPortfolio = position.quantity * position.avg_buy_price / total * 100;
-
+        console.log("PERCENT OF PORTFOLIO: ", percentOfPortfolio, "TOTAL: ", total, "QUANTITY: ", position.quantity, "AVG BUY PRICE: ", position.avg_buy_price)
         return percentOfPortfolio;
     }
 
@@ -43,18 +45,20 @@ const getPositions = async (userId: number): Promise<Position[]> => {
     const positions = await Promise.all(
         symbols.rows.map(async (row) => {
             const res = await yahooFinance.search(row.ticker);
-            const quote = res.quotes.find(
+            console.log(res.quotes)
+            const stockInfo = res.quotes.find(
                 (q): any =>
                     "symbol" in q && q.symbol === row.ticker
             );
+            const quote = await yahooFinance.quote(row.ticker) as unknown as QuoteResponseObject;
+
             return {
                 ...row,
-                name: (quote as any).shortname,
-                current_price: (quote as any).regularMarketPrice ?? null
+                name: (stockInfo as any).shortname,
+                current_price: quote.regularMarketPrice ?? quote.postMarketPrice ?? null
             } as Position;
         })
     )
-    console.log(positions)
     return positions;
 }
 
@@ -79,8 +83,6 @@ const addPosition = async (position: Position) => {
         status,
         notes,
     ]);
-
-    console.log(result.rows[0])
 
     return result.rows[0];
 }

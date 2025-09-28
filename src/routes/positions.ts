@@ -28,9 +28,12 @@ router.get("/", async (req, res) => {
         if (result === undefined) {
             res.send("User positions has returned undefined");
         }
+        else if (result.length === 0) {
+            res.send("Oops, looks like you have no positions");
+        }
 
         const totalEarnings = (calculateDynamicValues().getTotal(result));
-
+        console.log(totalEarnings)
         const portfolioPercent = result.map((position: Position) => {
             return {
                 ...position,
