@@ -11,6 +11,13 @@ const createPositionsTableFn = async () => {
 
 function calculateDynamicValues() {
 
+    const getDailyReturn = (positions: Array<{ current_price: number, prev_close: number, quantity: number }>) => {
+        return positions.reduce((acc, pos) => {
+            const dailyChange = (pos.current_price - pos.prev_close) * pos.quantity;
+            return acc + dailyChange
+        }, 0)
+    }
+
     const getRealTimePrice = async (ticker: string) => {
         const quote = await yahooFinance.quote(ticker) as unknown as QuoteResponseObject;
         return quote.regularMarketPrice ?? quote.postMarketPrice ?? null
@@ -24,11 +31,11 @@ function calculateDynamicValues() {
 
     const getPercentOfAccount = (position: { quantity: number, avg_buy_price: number }, total: number) => {
         const percentOfPortfolio = position.quantity * position.avg_buy_price / total * 100;
-        console.log("PERCENT OF PORTFOLIO: ", percentOfPortfolio, "TOTAL: ", total, "QUANTITY: ", position.quantity, "AVG BUY PRICE: ", position.avg_buy_price)
         return percentOfPortfolio;
     }
 
     return {
+        getDailyReturn,
         getRealTimePrice,
         getTotal,
         getPercentOfAccount
@@ -53,12 +60,12 @@ const getPositions = async (userId: number): Promise<Position[]> => {
                 (q): any =>
                     "symbol" in q && q.symbol === row.ticker
             );
-            const quote = calculateDynamicValues().getRealTimePrice(row.ticker);
+            const price = await calculateDynamicValues().getRealTimePrice(row.ticker);
 
             return {
                 ...row,
                 name: (stockInfo as any).shortname,
-                current_price: quote
+                current_price: price
             } as Position;
         })
     )

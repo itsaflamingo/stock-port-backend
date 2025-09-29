@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS positions (
   status VARCHAR(10) DEFAULT 'open',
   notes TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP );`
+  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ),
+  current_price NUMERIC;`
 
 const getPositionsQuery = `
 SELECT *
@@ -23,11 +24,12 @@ INSERT INTO positions (
   ticker,
   quantity,
   avg_buy_price,
+  current_price,
   buy_date,
   status,
   notes
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7
+  $1, $2, $3, $4, $5, $6, $7, $8
 )
 RETURNING *;`
 

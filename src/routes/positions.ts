@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
         }
 
         const totalEarnings = (calculateDynamicValues().getTotal(result));
-        console.log(totalEarnings)
+        console.log("TOTAL EARNINGS:", totalEarnings)
         const portfolioPercent = result.map((position: Position) => {
             return {
                 ...position,
@@ -57,6 +57,10 @@ router.post("/", async (req, res) => {
         res.send(err);
     }
     res.send(result);
+})
+
+router.patch("/", async (_req, res) => {
+    res.send("TODO: update position");
 })
 
 export default router;
