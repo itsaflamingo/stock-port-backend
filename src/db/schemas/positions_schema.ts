@@ -37,10 +37,13 @@ const editPositionQuery = `
 UPDATE positions
 SET 
   quantity = COALESCE($1, quantity),
-  notes = COALESCE($2, notes),
+  avg_buy_price = COALESCE($2, avg_buy_price),
+  buy_date = COALESCE($3, buy_date),
+  status = COALESCE($4, status),
+  notes = COALESCE($5, notes),
   last_updated = CURRENT_TIMESTAMP
-WHERE id = $3
-  AND user_id = $4
+WHERE id = $6
+  AND user_id = $7
 RETURNING *;
 `
 

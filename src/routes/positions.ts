@@ -34,14 +34,16 @@ router.get("/", async (req, res) => {
 
         const totalEarnings = (calculateDynamicValues().getTotal(result));
         console.log("TOTAL EARNINGS:", totalEarnings)
-        const portfolioPercent = result.map((position: Position) => {
+
+        const updatedPortfolio = result.map((position: Position) => {
             return {
                 ...position,
-                percent_of_account: calculateDynamicValues().getPercentOfAccount(position, totalEarnings)
+                percent_of_account: calculateDynamicValues().getPercentOfAccount(position, totalEarnings),
+                total_return: calculateDynamicValues().getTotalReturn(position.current_price, position.avg_buy_price, position.quantity)
             }
         });
 
-        res.send(portfolioPercent)
+        res.send(updatedPortfolio)
     } catch (err) {
         res.send(err);
     }

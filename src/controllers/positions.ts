@@ -18,6 +18,11 @@ function calculateDynamicValues() {
         }, 0)
     }
 
+    const getTotalReturn = (currentPrice: any, avgBuyPrice: number, quantity: number) => {
+        return (currentPrice - avgBuyPrice) * quantity;
+    };
+
+
     const getRealTimePrice = async (ticker: string) => {
         const quote = await yahooFinance.quote(ticker) as unknown as QuoteResponseObject;
         return quote.regularMarketPrice ?? quote.postMarketPrice ?? null
@@ -36,6 +41,7 @@ function calculateDynamicValues() {
 
     return {
         getDailyReturn,
+        getTotalReturn,
         getRealTimePrice,
         getTotal,
         getPercentOfAccount
