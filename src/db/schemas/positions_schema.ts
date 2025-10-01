@@ -41,9 +41,9 @@ SET
   buy_date = COALESCE($3, buy_date),
   status = COALESCE($4, status),
   notes = COALESCE($5, notes),
+  ticker = COALESCE($6, ticker),
   last_updated = CURRENT_TIMESTAMP
-WHERE id = $6
-  AND user_id = $7
+WHERE id = $7
 RETURNING *;
 `
 
