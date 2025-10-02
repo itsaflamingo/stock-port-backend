@@ -1,5 +1,5 @@
 import express from "express";
-import { calculateDynamicValues, addPosition, createPositionsTableFn, getPositions } from "../controllers/positions";
+import { calculateDynamicValues, addPosition, createPositionsTableFn, getPositions, editPosition } from "../controllers/positions";
 import Position from "../types/express/positions";
 
 const router = express.Router();
@@ -61,8 +61,22 @@ router.post("/", async (req, res) => {
     res.send(result);
 })
 
-router.patch("/", async (_req, res) => {
-    res.send("TODO: update position");
+router.patch("/", async (req, res) => {
+
+    const { id, ticker, quantity, avg_buy_price, buy_date, status, notes } = req.body;
+    let result;
+
+    try {
+        result = await editPosition(id, ticker, quantity, avg_buy_price, buy_date, status, notes);
+
+        if (result.length === 0) {
+            res.send("Oops, looks like you have no positions");
+        }
+    } catch (err) {
+        res.send(err);
+    }
+
+    res.send(result);
 })
 
 export default router;

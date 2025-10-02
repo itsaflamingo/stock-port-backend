@@ -1,4 +1,4 @@
-import { addPositionQuery, createPositionsTable, getPositionsQuery } from "../db/schemas/positions_schema";
+import { addPositionQuery, createPositionsTable, editPositionQuery, getPositionsQuery } from "../db/schemas/positions_schema";
 import pool from "../db/pool";
 import Position from "../types/express/positions";
 import yahooFinance from "yahoo-finance2";
@@ -102,5 +102,15 @@ const addPosition = async (position: Position) => {
 
     return result.rows[0];
 }
+/**
+ * 
+ * @param user_id 
+ * @param symbol 
+ * @returns individual position object
+ */
+const editPosition = async (id: number, ticker: string, quantity: number, avg_buy_price: number, buy_date: string, status: string, notes: string): Promise<Position[]> => {
+    const result = await pool.query(editPositionQuery, [Number(quantity), avg_buy_price, buy_date, status, notes, ticker, Number(id)]);
+    return result.rows;
+}
 
-export { calculateDynamicValues, createPositionsTableFn, getPositions, addPosition }
+export { calculateDynamicValues, createPositionsTableFn, getPositions, addPosition, editPosition }
