@@ -46,5 +46,6 @@ SET
 WHERE id = $7
 RETURNING *;
 `
+const deletePositionQuery = `DELETE FROM positions WHERE id = $1 RETURNING id;`
 
-export { createPositionsTable, getPositionsQuery, addPositionQuery, editPositionQuery }
+export { createPositionsTable, getPositionsQuery, addPositionQuery, editPositionQuery, deletePositionQuery }
