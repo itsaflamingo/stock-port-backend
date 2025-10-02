@@ -1,6 +1,7 @@
 import express from "express";
-import { calculateDynamicValues, addPosition, createPositionsTableFn, getPositions, editPosition } from "../controllers/positions";
+import { addPosition, createPositionsTableFn, getPositions, editPosition } from "../controllers/positions";
 import Position from "../types/express/positions";
+import { updatePortfolio } from "../helper/positions_helper";
 
 const router = express.Router();
 
@@ -20,28 +21,19 @@ router.get("/create-table", async (_req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    let result: Position[];
+    let positions: Position[];
 
     try {
-        result = await getPositions(req.body.user_id);
+        positions = await getPositions(req.body.user_id);
 
-        if (result === undefined) {
+        if (positions === undefined) {
             res.send("User positions has returned undefined");
         }
-        else if (result.length === 0) {
+        else if (positions.length === 0) {
             res.send("Oops, looks like you have no positions");
         }
 
-        const totalEarnings = (calculateDynamicValues().getTotal(result));
-        console.log("TOTAL EARNINGS:", totalEarnings)
-
-        const updatedPortfolio = result.map((position: Position) => {
-            return {
-                ...position,
-                percent_of_account: calculateDynamicValues().getPercentOfAccount(position, totalEarnings),
-                total_return: calculateDynamicValues().getTotalReturn(position.current_price, position.avg_buy_price, position.quantity)
-            }
-        });
+        const updatedPortfolio = updatePortfolio(positions);
 
         res.send(updatedPortfolio)
     } catch (err) {
@@ -64,19 +56,20 @@ router.post("/", async (req, res) => {
 router.patch("/", async (req, res) => {
 
     const { id, ticker, quantity, avg_buy_price, buy_date, status, notes } = req.body;
-    let result;
+
+    let position;
 
     try {
-        result = await editPosition(id, ticker, quantity, avg_buy_price, buy_date, status, notes);
+        position = await editPosition(id, ticker, quantity, avg_buy_price, buy_date, status, notes);
 
-        if (result.length === 0) {
+        if (position.length === 0) {
             res.send("Oops, looks like you have no positions");
         }
     } catch (err) {
         res.send(err);
     }
 
-    res.send(result);
+    res.send(position);
 })
 
 export default router;
