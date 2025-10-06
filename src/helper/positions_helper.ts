@@ -1,7 +1,14 @@
 import yahooFinance from "yahoo-finance2";
 import { QuoteResponseObject } from "yahoo-finance2/dist/esm/src/modules/quote";
 import Position from "../types/express/positions";
-
+/**
+ * @returns helper functions that calculate dynamic values for positions
+ * for example: total return: (current price - avg buy price) * quantity
+ * dailyReturn: (current price - prev close) * quantity
+ * realTimePrice: current price
+ * getTotal: total of all positions
+ * getPercentOfAccount: percent that each position makes up of account
+ */
 function calculateDynamicValues() {
 
     const getDailyReturn = (positions: Array<{ current_price: number, prev_close: number, quantity: number }>) => {
@@ -42,6 +49,11 @@ function calculateDynamicValues() {
 
 }
 
+/**
+ * 
+ * @param positions 
+ * @returns portfolio object updated with dynamic values percent_of_account and total_return
+ */
 function updatePortfolio(positions: Position[]) {
     const totalEarnings = (calculateDynamicValues().getTotal(positions));
     console.log("TOTAL EARNINGS:", totalEarnings)

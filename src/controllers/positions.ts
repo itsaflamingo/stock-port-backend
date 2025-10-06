@@ -4,6 +4,10 @@ import Position from "../types/express/positions";
 import yahooFinance from "yahoo-finance2";
 import { calculateDynamicValues } from "../helper/positions_helper";
 
+/**
+ * Creates the positions table in the database if it doesn't already exist.
+ * @returns {Promise<QueryResult>} The result of the query.
+ */
 const createPositionsTableFn = async () => {
     const result = await pool.query(createPositionsTable);
     return result.rows[0];
@@ -14,6 +18,7 @@ const createPositionsTableFn = async () => {
  * The objects contain the ticker symbol, quantity, average buy price, and total return.
  * @param {number} userId - The id of the user.
  * @returns {Promise<Position[]>} A promise that resolves with an array of Position objects.
+ * Error handling occurs in the router
  */
 const getPositions = async (userId: number): Promise<Position[]> => {
     const symbols = await pool.query(getPositionsQuery, [userId]);
@@ -37,7 +42,10 @@ const getPositions = async (userId: number): Promise<Position[]> => {
     )
     return positions;
 }
-
+/**
+ * @param position object, can include all or some of the following properties: user_id, ticker, quantity, avg_buy_price, buy_date, status, notes
+ * @returns new position object, error handling occurs in the router
+ */
 const addPosition = async (position: Position) => {
 
     const {
@@ -62,15 +70,21 @@ const addPosition = async (position: Position) => {
 
     return result.rows[0];
 }
+
 /**
  * 
- * @param user_id 
- * @param symbol 
- * @returns individual position object
+ * @param id 
+ * @param ticker 
+ * @param quantity 
+ * @param avg_buy_price 
+ * @param buy_date 
+ * @param status 
+ * @param notes 
+ * @returns updated position object, error handling occurs in the router 
  */
 const editPosition = async (id: number, ticker: string, quantity: number, avg_buy_price: number, buy_date: string, status: string, notes: string): Promise<Position[]> => {
     const result = await pool.query(editPositionQuery, [Number(quantity), avg_buy_price, buy_date, status, notes, ticker, Number(id)]);
-    return result.rows;
+    return result.rows[0];
 }
 
 export { createPositionsTableFn, getPositions, addPosition, editPosition }
