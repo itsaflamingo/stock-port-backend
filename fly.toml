@@ -1,0 +1,12 @@
+app = "stock-port-backend"  # 👈 Your Fly app name (from fly.io dashboard)
+
+[build]
+  # optional: specify buildpack or Dockerfile if needed
+  # dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080       # change if your app listens on another port
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
