@@ -1,5 +1,5 @@
 import express from "express";
-import { updateUserFn, deleteUserFn } from "../controllers/user";
+import { updateUserFn, deleteUserFn } from "../controllers/user.js";
 import bcrypt from "bcryptjs";
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import yahooFinance from "yahoo-finance2";
 import { QuoteResponseObject } from "yahoo-finance2/dist/esm/src/modules/quote";
-import Position from "../types/express/positions";
+import Position from "../types/express/positions.js";
 /**
  * @returns helper functions that calculate dynamic values for positions
  * for example: total return: (current price - avg buy price) * quantity

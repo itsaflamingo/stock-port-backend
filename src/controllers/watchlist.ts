@@ -1,5 +1,5 @@
-import pool from "../db/pool";
-import { addToWatchlist, createWatchlistTable, deleteFromWatchlist, getWatchlistQuery } from "../db/schemas/watchlist_schema";
+import pool from "../db/pool.js";
+import { addToWatchlist, createWatchlistTable, deleteFromWatchlist, getWatchlistQuery } from "../db/schemas/watchlist_schema.js";
 import yahooFinance from "yahoo-finance2";
 /**
  * Creates the watchlist table if it does not exist.

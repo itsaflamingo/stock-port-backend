@@ -1,5 +1,5 @@
 import express from "express";
-import { addUserIfNotExists } from "../controllers/user";
+import { addUserIfNotExists } from "../controllers/user.js";
 import bcrypt from "bcryptjs";
 
 const router = express.Router();

@@ -1,9 +1,9 @@
 import { QueryResult } from "pg";
-import pool from "../db/pool";
+import pool from "../db/pool.js";
 import dotenv from "dotenv";
-import createUsersTable, { createType, select, findUser, addUser, alterTableUsers, updateUser, deleteUser } from "../db/schemas/user-schema";
-import { User } from "../types/express/user";
-import { insertAdminUser, params } from "../db/queries/admin-user";
+import createUsersTable, { createType, select, findUser, addUser, alterTableUsers, updateUser, deleteUser } from "../db/schemas/user-schema.js";
+import { User } from "../types/express/user.d.js";
+import { insertAdminUser, params } from "../db/queries/admin-user.js";
 
 dotenv.config();
 

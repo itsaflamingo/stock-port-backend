@@ -31,12 +31,12 @@ RUN npm install --omit=dev
 # Copy compiled output
 COPY --from=builder /app/build ./build
 
-# Expose Fly.io port
+# Expose port
 EXPOSE 8080
-
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# Start the app
-CMD ["npm", "start"]
+# Start the app (ESM-compatible)
+CMD ["node", "build/index.ts"]
+
 

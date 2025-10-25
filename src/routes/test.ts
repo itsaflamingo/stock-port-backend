@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import supabase from '../utils/supabase';
+import supabase from '../utils/supabase.js';
 
 const router = Router();
 
-router.get('/test', async (req: Request, res: Response): Promise<void> => {
+router.get('/test', async (_req, res: Response): Promise<void> => {
   try {
     const { data, error } = await supabase
       .from('positions')
@@ -28,14 +28,14 @@ router.post('/test', async (req: Request, res: Response): Promise<void> => {
     const { name } = req.body;
     const { data, error } = await supabase
       .from('positions')
-      .insert({name})
+      .insert({ name })
       .select();
 
-    if(error) {
+    if (error) {
       res.status(500).json({ error: error.message });
       return;
     }
-    
+
     res.status(201).json({ success: true, data });
   }
   catch (err) {

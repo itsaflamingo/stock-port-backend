@@ -1,5 +1,5 @@
 import express from "express"
-import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn, getWatchlist } from "../controllers/watchlist";
+import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn, getWatchlist } from "../controllers/watchlist.js";
 
 const router = express.Router();
 

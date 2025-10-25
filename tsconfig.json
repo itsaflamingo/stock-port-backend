@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "typeRoots" : ["./src/types", "./node_modules/@types"],
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ],
     "target": "ES6",
+    "moduleResolution": "nodenext",
     "rootDir": "./",
     "outDir": "./build/",
-    "module": "commonjs",
+    "module": "nodenext",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
   }
 }

@@ -1,19 +1,19 @@
 import express from "express";
 import dotenv from 'dotenv';
 // import { requireAuth } from "./middleware/auth";
-import usersRouter from "./routes/user";
-import signUp from "./routes/register";
-import searchRouter from "./routes/search";
-import candlesRouter from "./routes/candles";
-import watchlistRouter from "./routes/watchlist";
-import positionsRouter from "./routes/positions"
-import pool from "./db/pool";
-import index from "./routes/index";
+import usersRouter from "./routes/user.js";
+import signUp from "./routes/register.js";
+import searchRouter from "./routes/search.js";
+import candlesRouter from "./routes/candles.js";
+import watchlistRouter from "./routes/watchlist.js";
+import positionsRouter from "./routes/positions.js"
+import pool from "./db/pool.js";
+import index from "./routes/index.js";
 import session from "express-session";
 import passport from "passport";
 import bcrypt from "bcryptjs";
 import { Strategy as LocalStrategy } from "passport-local";
-import { User } from "./types/express/user";
+import { User } from "./types/express/user.d.js";
 
 dotenv.config();
 

@@ -1,7 +1,7 @@
 import express from "express";
-import { addPosition, createPositionsTableFn, getPositions, editPosition } from "../controllers/positions";
-import Position from "../types/express/positions";
-import { updatePortfolio } from "../helper/positions_helper";
+import { addPosition, createPositionsTableFn, getPositions, editPosition } from "../controllers/positions.js";
+import Position from "../types/express/positions.d.js";
+import { updatePortfolio } from "../helper/positions_helper.js";
 
 const router = express.Router();
 

@@ -1,8 +1,8 @@
-import { addPositionQuery, createPositionsTable, editPositionQuery, getPositionsQuery } from "../db/schemas/positions_schema";
-import pool from "../db/pool";
-import Position from "../types/express/positions";
+import { addPositionQuery, createPositionsTable, editPositionQuery, getPositionsQuery } from "../db/schemas/positions_schema.js";
+import pool from "../db/pool.js";
+import Position from "../types/express/positions.js";
 import yahooFinance from "yahoo-finance2";
-import { calculateDynamicValues } from "../helper/positions_helper";
+import { calculateDynamicValues } from "../helper/positions_helper.js";
 
 /**
  * Creates the positions table in the database if it doesn't already exist.

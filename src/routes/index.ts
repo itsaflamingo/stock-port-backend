@@ -1,6 +1,6 @@
 import express from "express";
-import { setUpUsersTable } from "../controllers/user";
-import { setUpAdmin } from "../controllers/user";
+import { setUpUsersTable } from "../controllers/user.js";
+import { setUpAdmin } from "../controllers/user.js";
 
 const router = express.Router();
 

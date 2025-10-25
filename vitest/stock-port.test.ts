@@ -1,7 +1,7 @@
 // test/routes.test.ts
 import request from "supertest";
 import express from 'express';
-import testRoute from '../src/routes/test';
+import testRoute from '../src/routes/test.js';
 import { vi, describe, it, expect } from 'vitest';
 
 vi.mock('../src/utils/supabase', async () => {
@@ -34,15 +34,15 @@ app.use('/api', testRoute);
 describe('GET /api/test', () => {
   it('should return mock data', async () => {
     const res = await request(app).get('/api/test');
-    console.log('Test response:', res.body); 
+    console.log('Test response:', res.body);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveLength(1);
   });
   it('should return posted data', async () => {
     const res = await request(app)
-    .post('/api/test')
-    .send({ name: 'Mock name' });
+      .post('/api/test')
+      .send({ name: 'Mock name' });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
