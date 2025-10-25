@@ -17,7 +17,9 @@
     "test": "vitest",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts ../src/db/pool.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",
