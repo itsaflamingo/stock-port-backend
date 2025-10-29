@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,12 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Router } from 'express';
-import supabase from '../utils/supabase.js';
-const router = Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const supabase_js_1 = __importDefault(require("../utils/supabase.js"));
+const router = (0, express_1.Router)();
 router.get('/test', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { data, error } = yield supabase
+        const { data, error } = yield supabase_js_1.default
             .from('positions')
             .select('*')
             .limit(1);
@@ -31,7 +36,7 @@ router.get('/test', (_req, res) => __awaiter(void 0, void 0, void 0, function* (
 router.post('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name } = req.body;
-        const { data, error } = yield supabase
+        const { data, error } = yield supabase_js_1.default
             .from('positions')
             .insert({ name })
             .select();
@@ -46,4 +51,4 @@ router.post('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).json({ error: 'Internal server error' });
     }
 }));
-export default router;
+exports.default = router;

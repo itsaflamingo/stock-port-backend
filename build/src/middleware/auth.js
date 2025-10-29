@@ -1,8 +1,9 @@
+"use strict";
 // import jwt from 'jsonwebtoken';
 // import pool from '../db/pool';
 // import {Response, Request, NextFunction} from 'express';
 // import { Express } from '../types/express';
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });
 // const JWT_SECRET = process.env.JWT_SECRET;
 // //middleware to check if user is authenticated
 // export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {

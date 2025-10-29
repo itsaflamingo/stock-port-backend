@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import express from "express";
-import { addUserIfNotExists } from "../controllers/user.js";
-import bcrypt from "bcryptjs";
-const router = express.Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const user_js_1 = require("../controllers/user.js");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const router = express_1.default.Router();
 router.get("/", (_req, res) => {
     res.send("sign up");
 });
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
-    const hashedPassword = yield bcrypt.hash(password, 10);
-    const result = yield addUserIfNotExists(username, email, hashedPassword);
+    const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+    const result = yield (0, user_js_1.addUserIfNotExists)(username, email, hashedPassword);
     res.send(result);
 }));
-export default router;
+exports.default = router;

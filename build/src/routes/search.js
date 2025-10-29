@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,13 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import express from "express";
-import yahooFinance from "yahoo-finance2";
-const router = express.Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const yahoo_finance2_1 = __importDefault(require("yahoo-finance2"));
+const router = express_1.default.Router();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
     try {
-        result = yield yahooFinance.search(req.body.symbol);
+        result = yield yahoo_finance2_1.default.search(req.body.symbol);
     }
     catch (err) {
         console.error(err);
@@ -21,4 +26,4 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.send(result);
 }));
-export default router;
+exports.default = router;

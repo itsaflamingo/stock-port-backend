@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deletePositionQuery = exports.editPositionQuery = exports.addPositionQuery = exports.getPositionsQuery = exports.createPositionsTable = void 0;
 const createPositionsTable = `
 CREATE TABLE IF NOT EXISTS positions (
   id SERIAL PRIMARY KEY,
@@ -12,10 +15,12 @@ CREATE TABLE IF NOT EXISTS positions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ),
   current_price NUMERIC;`;
+exports.createPositionsTable = createPositionsTable;
 const getPositionsQuery = `
 SELECT *
 FROM positions
 WHERE user_id = $1;`;
+exports.getPositionsQuery = getPositionsQuery;
 const addPositionQuery = `
 INSERT INTO positions (
   user_id,
@@ -30,6 +35,7 @@ INSERT INTO positions (
   $1, $2, $3, $4, $5, $6, $7, $8
 )
 RETURNING *;`;
+exports.addPositionQuery = addPositionQuery;
 const editPositionQuery = `
 UPDATE positions
 SET 
@@ -43,5 +49,6 @@ SET
 WHERE id = $7
 RETURNING *;
 `;
+exports.editPositionQuery = editPositionQuery;
 const deletePositionQuery = `DELETE FROM positions WHERE id = $1 RETURNING id;`;
-export { createPositionsTable, getPositionsQuery, addPositionQuery, editPositionQuery, deletePositionQuery };
+exports.deletePositionQuery = deletePositionQuery;

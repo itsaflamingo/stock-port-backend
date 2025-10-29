@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import express from "express";
-import { addToWatchlistFn, createWatchlistTableFn, deleteFromWatchlistFn, getWatchlist } from "../controllers/watchlist.js";
-const router = express.Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const watchlist_js_1 = require("../controllers/watchlist.js");
+const router = express_1.default.Router();
 router.get("/create-table", (_req, res) => {
-    const result = createWatchlistTableFn();
+    const result = (0, watchlist_js_1.createWatchlistTableFn)();
     res.send(result);
 });
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
     try {
-        result = yield getWatchlist(req.body.user_id);
+        result = yield (0, watchlist_js_1.getWatchlist)(req.body.user_id);
     }
     catch (err) {
         res.send(err);
@@ -28,7 +33,7 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
     try {
-        result = yield addToWatchlistFn(req.body.user_id, req.body.symbol);
+        result = yield (0, watchlist_js_1.addToWatchlistFn)(req.body.user_id, req.body.symbol);
     }
     catch (err) {
         console.error(err);
@@ -40,11 +45,11 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
     try {
-        result = yield deleteFromWatchlistFn(req.body.user_id, req.body.symbol);
+        result = yield (0, watchlist_js_1.deleteFromWatchlistFn)(req.body.user_id, req.body.symbol);
     }
     catch (err) {
         res.status(500).send(`API error: ${err}`);
     }
     res.send(result);
 }));
-export default router;
+exports.default = router;

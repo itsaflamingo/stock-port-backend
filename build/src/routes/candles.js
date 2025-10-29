@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,14 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import express from "express";
-import yahooFinance from "yahoo-finance2";
-const router = express.Router();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const yahoo_finance2_1 = __importDefault(require("yahoo-finance2"));
+const router = express_1.default.Router();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let candles;
     // Get historical data from Yahoo Finance from start to end, representing different candles
     try {
-        const result = yield yahooFinance.chart(req.body.symbol, {
+        const result = yield yahoo_finance2_1.default.chart(req.body.symbol, {
             period1: req.body.period1,
             period2: req.body.period2,
             interval: req.body.interval
@@ -37,4 +42,4 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // send candles
     res.send(candles);
 }));
-export default router;
+exports.default = router;

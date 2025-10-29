@@ -1,5 +1,7 @@
-import { DefaultApi } from "finnhub-ts";
-const finnhubClient = new DefaultApi({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const finnhub_ts_1 = require("finnhub-ts");
+const finnhubClient = new finnhub_ts_1.DefaultApi({
     apiKey: process.env.FINNHUB_API,
     isJsonMime: (input) => {
         try {
@@ -10,4 +12,4 @@ const finnhubClient = new DefaultApi({
         return false;
     },
 });
-export default finnhubClient;
+exports.default = finnhubClient;
