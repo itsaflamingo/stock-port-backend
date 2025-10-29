@@ -37,19 +37,21 @@ const port = 5000;
 pool_js_1.default.query('SELECT NOW()')
     .then(res => console.log('✅ Connected to DB:', res.rows[0]))
     .catch(err => {
-        console.error('❌ DB connection failed:', err);
-        process.exit(1);
-    });
+    console.error('❌ DB connection failed:', err);
+    process.exit(1);
+});
 // Use LocalStratefy to authenticate users
 passport_1.default.use(new passport_local_1.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows } = yield pool_js_1.default.query("SELECT * FROM users WHERE username = $1", [username]);
         const user = yield rows[0];
+        console.log(user);
         if (!user) {
             return done(null, false, { message: "Incorrect username" });
         }
         const match = yield bcryptjs_1.default.compare(password, user.password);
-        if (!match) {
+        console.log(match);
+        if (match == false) {
             // passwords do not match!
             return done(null, false, { message: "Incorrect password" });
         }
@@ -87,7 +89,13 @@ app.use("/positions", positions_js_1.default);
 app.post('/login', (req, res, next) => {
     passport_1.default.authenticate('local')(req, res, next);
 }, (req, res) => {
-    res.status(200).json({ message: 'Login successful', user: req.user });
+    try {
+        res.status(200).json({ message: 'Login successful', user: req.user });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal error" });
+    }
 });
 app.get("/log-out", (req, res, next) => {
     req.logout((err) => {

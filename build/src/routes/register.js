@@ -16,9 +16,6 @@ const express_1 = __importDefault(require("express"));
 const user_js_1 = require("../controllers/user.js");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const router = express_1.default.Router();
-router.get("/", (_req, res) => {
-    res.send("sign up");
-});
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
     const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
