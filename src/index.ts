@@ -24,7 +24,7 @@ app.use(session({ secret: process.env.JWT_SECRET as string, resave: false, saveU
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-const port = 3000;
+const port = 5000;
 
 pool.query('SELECT NOW()')
   .then(res => console.log('✅ Connected to DB:', res.rows[0]))
@@ -39,12 +39,14 @@ passport.use(
     try {
       const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
       const user = await rows[0];
+      console.log(user)
 
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
       const match = await bcrypt.compare(password, user.password);
-      if (!match) {
+      console.log(match)
+      if (match == false) {
         // passwords do not match!
         return done(null, false, { message: "Incorrect password" })
       }

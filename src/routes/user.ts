@@ -4,10 +4,6 @@ import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
-    res.send("sign in");
-})
-
 router.patch("/", async (req, res) => {
     let hashedPassword = "";
     let result;
