@@ -18,7 +18,7 @@
     "dev": "tsx watch src/index.ts ../src/db/pool.ts",
     "lint": "eslint .",
     "build": "tsc --skipLibCheck",
-    "start": "node build/index.ts"
+    "start": "node build/src/index.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",
