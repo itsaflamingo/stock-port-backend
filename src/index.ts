@@ -85,7 +85,12 @@ app.use("/positions", positionsRouter);
 app.post('/login', (req, res, next) => {
   passport.authenticate('local')(req, res, next);
 }, (req, res) => {
-  res.status(200).json({ message: 'Login successful', user: req.user });
+  try {
+    res.status(200).json({ message: 'Login successful', user: req.user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal error" });
+  }
 });
 
 app.get("/log-out", (req, res, next) => {
