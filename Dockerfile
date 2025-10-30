@@ -37,6 +37,6 @@ ENV NODE_ENV=production
 ENV PORT=8080
 
 # Start the app (ESM-compatible)
-CMD ["node", "build/index.ts"]
+CMD ["node", "build/src/index.ts"]
 
 
