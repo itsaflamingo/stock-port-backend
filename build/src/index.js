@@ -33,13 +33,13 @@ app.use(express_1.default.json());
 app.use((0, express_session_1.default)({ secret: process.env.JWT_SECRET, resave: false, saveUninitialized: false }));
 app.use(passport_1.default.session());
 app.use(express_1.default.urlencoded({ extended: false }));
-const port = 5000;
+const port = 8080;
 pool_js_1.default.query('SELECT NOW()')
     .then(res => console.log('✅ Connected to DB:', res.rows[0]))
     .catch(err => {
-    console.error('❌ DB connection failed:', err);
-    process.exit(1);
-});
+        console.error('❌ DB connection failed:', err);
+        process.exit(1);
+    });
 // Use LocalStratefy to authenticate users
 passport_1.default.use(new passport_local_1.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {

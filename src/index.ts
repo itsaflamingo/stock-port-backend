@@ -24,7 +24,7 @@ app.use(session({ secret: process.env.JWT_SECRET as string, resave: false, saveU
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-const port = 5000;
+const port = 8080;
 
 pool.query('SELECT NOW()')
   .then(res => console.log('✅ Connected to DB:', res.rows[0]))
@@ -38,6 +38,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      console.log(username)
       const user = await rows[0];
       console.log(user)
 
